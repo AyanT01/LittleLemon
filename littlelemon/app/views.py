@@ -20,4 +20,14 @@ def book(request):
 def menu(request):
     menu_items = Menu.objects.all() 
     menu_items_dict = {"menu_items":menu_items}
-    return render(request,"menu",menu_items_dict)
+    return render(request,"menu.html",menu_items_dict)
+
+def display_menu_items(request,pk=None):
+    if pk:
+        menu_item = Menu.objects.get(id=pk) 
+    else:
+        menu_item = ""
+    menu_item_dict = {
+        "menu_item":menu_item
+    }
+    return render(request,"menu_item.html",menu_item_dict)
