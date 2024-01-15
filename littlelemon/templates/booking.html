@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section>
+    <article>
+        <h1>Make a Reservation</h1>
+        <div class="row">
+            <div class="column">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Submit your Booking">
+                </form>
+                
+            </div>
+        </div>
+    </article>
+</section>
+{% endblock %}
+

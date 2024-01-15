@@ -12,7 +12,7 @@ class Menu(models.Model):
 class Booking(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100) 
-    phone_number = models.IntegerField() 
+    number_of_guests = models.IntegerField() 
     comment = models.CharField(max_length=1000) 
 
     def __str__(self):

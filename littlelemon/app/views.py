@@ -11,7 +11,7 @@ def about(request):
 def book(request):
     form = Booking_Form() 
     if request.method == "POST":
-        form = form(request.post) 
+        form = Booking_Form(request.POST) 
         if form.is_valid():
             form.save() 
     context = {"form":form}
