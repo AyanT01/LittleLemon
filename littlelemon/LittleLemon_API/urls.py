@@ -6,4 +6,5 @@ urlpatterns = [
     path("api/single-menuitem/<int:pk>",views.single_menu_item),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+    path("managers",views.managers)
 ]
