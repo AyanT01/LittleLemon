@@ -39,6 +39,10 @@ def menu_items(request):
     if request.method == "PATCH":
         pass """
 
+"""
+/api/groups/manager/users/{userId}
+"""
+
 @api_view(["GET","POST","PUT","PATCH","DELETE"]) 
 @permission_classes([IsAuthenticated])
 def managers(request):
@@ -48,19 +52,34 @@ def managers(request):
         if request.method == "GET":
             serialized_item = UserSerializer(UserModel,many=True) 
             return Response(serialized_item.data)
-        username = request.data["username"]
-        if username:
-            user = get_object_or_404(UserModel, username=username)
-            #managers = UserModel.objects.get(name='Manager')
-            if request.method == 'POST':
-                Manager.user_set.add(user)
-            elif request.method == 'DELETE':
-                Manager.user_set.remove(user)
-            return Response({"message": 'ok'})
+        else:
+            #username = request.data["username"]
+            username = "AyanT"
+            if username:
+                user = get_object_or_404(UserModel, username=username)
+                #managers = UserModel.objects.get(name='Manager')
+                if request.method == 'POST':
+                    Manager.objects.create(user)
+                elif request.method == 'DELETE':
+                    Manager.user_set.remove(user)
+                return Response({"message": 'ok'})
     else:
         return Response({'message': 'error'})
         
-        
+@permission_classes([IsAuthenticated])
+@api_view(["GET","POST"])
+def delivery_crew(request,pk=0):
+    if request.user.groups.filter(name="Manager").exists():
+        delivery_crew = get_user_model().objects.filter(groups__name="DeliveryCrew")
+        if request.method == "GET":
+            if pk == 0:
+                serialized_data = UserSerializer(delivery_crew,many=True) 
+                return Response(serialized_data.data) 
+            else:
+                serialized_data = UserSerializer(delivery_crew.get(id=pk))
+                return Response(serialized_data.data) 
+        if request.method == "POST":
+            pass
 @api_view(["GET","POST","PUT","PATCH","DELETE"])
 def single_menu_item(request,pk):
     if request.method == "GET":
@@ -73,7 +92,6 @@ def single_menu_item(request,pk):
             serialized_item.is_valid(raise_exception=True) 
             serialized_item.save() 
             return Response(serialized_item.data) 
-            pass 
         if request.method == "DELETE":
             Menu.objects.filter(id=pk).delete()
             return Response({"message":"Deletion successful"})
@@ -89,7 +107,6 @@ def single_menu_item(request,pk):
             item_data.is_valid(raise_exception=True) 
             item_data.save() 
             return Response(item_data.data)
-            pass
     else:
         return Response({"message":"You are not authorized"})
 
