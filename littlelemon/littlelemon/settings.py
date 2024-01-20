@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     "djoser",
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    "LittleLemon_API.apps.LittlelemonApiConfig"
     
 ]
 

@@ -8,9 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth import get_user_model 
-from . serializers import UserSerializer
-
-
+from . serializers import UserSerializer, OrderSerializer
+from . models import Order, OrderItem, Cart 
 @api_view(["GET","POST","PUT","PATCH","DELETE"]) 
 #@permission_classes([IsAuthenticated])
 def menu_items(request):
@@ -127,3 +126,13 @@ class MenuItemView(generics.ListAPIView):
         return Response({"message":"You are not authorized"})
 
 """
+
+@api_view(["GET","POST"]) 
+@permission_classes([IsAuthenticated])
+def orders(request):
+    user_ = request.user 
+    if user_:
+        data = Order.objects.filter(user = user_)
+        serialized_data = OrderSerializer(data,many=True)
+        return Response(serialized_data.data)
+        
