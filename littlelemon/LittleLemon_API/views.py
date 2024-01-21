@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth import get_user_model 
-from . serializers import UserSerializer, OrderSerializer
+from . serializers import UserSerializer, OrderSerializer, CartSerializer
 from . models import Order, OrderItem, Cart 
 @api_view(["GET","POST","PUT","PATCH","DELETE"]) 
 #@permission_classes([IsAuthenticated])
@@ -135,4 +135,22 @@ def orders(request):
         data = Order.objects.filter(user = user_)
         serialized_data = OrderSerializer(data,many=True)
         return Response(serialized_data.data)
-        
+    
+@api_view(["GET","POST","DELETE"])
+@permission_classes([IsAuthenticated])
+def cart(request):
+    user_ = request.user
+    if request.method == "GET":
+        if user_:
+            data = Cart.objects.filter(user=user_) 
+            serialized_data = CartSerializer(data, many=True) 
+            return Response(serialized_data.data) 
+    if request.method == "DELETE":
+        Cart.objects.filter(user=user_).delete()
+        return Response({"message":"Deletion successful"})
+    if request.method == "POST":
+        serialized_item = CartSerializer(data=request.data) 
+        serialized_item.is_valid(raise_exception=True) 
+        serialized_item.save() 
+        return Response(serialized_item.data)
+    pass 

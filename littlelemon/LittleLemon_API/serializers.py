@@ -22,3 +22,17 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ["user","status","total","date"]
+        
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ["user","menu_item","quantity","unit_price","price"]#,"user","quantity"]
+        model = Cart
+"""class Cart(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    menu_item = models.ForeignKey(Menu,on_delete=models.CASCADE)
+    quantity = models.SmallIntegerField() 
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(max_digits = 6, decimal_places=2) 
+    
+    class Meta:
+        unique_together =  ("menu_item","user")"""
